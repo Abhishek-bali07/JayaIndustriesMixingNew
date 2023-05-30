@@ -19,6 +19,8 @@ sealed class Destination(
 
  object SplashScreen : NoArgumentsDestination(AppRoutes.SPLASH)
 
+ object LoginScreen : NoArgumentsDestination(AppRoutes.LOGIN)
+
 }
 
 private fun String.appendParams(vararg params: Pair<String, Any?>): String {

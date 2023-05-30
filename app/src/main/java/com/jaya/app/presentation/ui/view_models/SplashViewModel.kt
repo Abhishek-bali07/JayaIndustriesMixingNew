@@ -1,15 +1,167 @@
 package com.jaya.app.presentation.ui.view_models
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jaya.app.core.common.constants.Destination
+import com.jaya.app.core.common.constants.DialogData
+import com.jaya.app.core.common.enums.EmitType
+import com.jaya.app.core.common.enums.IntroStatus
+import com.jaya.app.core.entities.AppVersion
+import com.jaya.app.core.usecases.SplashUseCase
 import com.jaya.app.core.utils.AppNavigator
+import com.jaya.app.presentation.states.Dialog
+import com.jaya.app.presentation.states.castValueToRequiredTypes
+import com.jaya.app.utills.helper_impl.SavableMutableState
+import com.jaya.app.utills.helper_impl.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private  val appNavigator: AppNavigator,
+    private val splashUseCases: SplashUseCase,
     savedStateHandle: SavedStateHandle
 
 ) :ViewModel() {
+
+
+   init {
+       viewModelScope.launch {
+           checkIntroStatus()
+           checkAppVersion()
+
+       }
+
+
+   }
+
+    val splashBtnStatus = SavableMutableState(
+        key = UiData.IntroStatusKey,
+        savedStateHandle = savedStateHandle,
+        initialData = IntroStatus.NOT_DONE
+    )
+
+   val versionUpdateDialog = mutableStateOf<Dialog?>(null)
+
+
+    private suspend fun  checkIntroStatus(){
+        splashUseCases.checkIntroStatus().flowOn(Dispatchers.Default).collect{dataEntry ->
+            when(dataEntry.type){
+                EmitType.IntroStatus->{
+                    dataEntry.value.apply {
+                        castValueToRequiredTypes<IntroStatus>()?.let {
+                            splashBtnStatus.setValue(it)
+                        }
+                    }
+                }
+                else -> {}
+            }
+
+        }
+
+    }
+
+
+    fun onSplashBtnClicked(
+        destination: Destination.NoArgumentsDestination = Destination.LoginScreen
+    ){
+        appNavigator.tryNavigateTo(
+            destination(),
+            popUpToRoute = Destination.SplashScreen(),
+            isSingleTop = true,
+            inclusive = true
+        )
+    }
+
+
+    private suspend fun checkAppVersion(){
+        splashUseCases.checkAppVersion().flowOn(Dispatchers.IO).collect{
+            when(it.type){
+
+                EmitType.BackendError ->{
+                    it.value?.apply {
+                        castValueToRequiredTypes<String>()?.let {
+
+                        }
+                    }
+                }
+
+                EmitType.AppVersion ->{
+                    it.value?.apply {
+                        castValueToRequiredTypes<AppVersion>()?.let { appVersion ->
+                            versionUpdateDialog.value = Dialog(
+                                data = DialogData(
+                                    title = "",
+                                    message = "",
+                                    positive = "",
+                                    negative = "",
+                                    data = appVersion
+                                )
+                            )
+                            handelDialogEvents()
+                        }
+                    }
+                }
+
+                EmitType.Navigate ->{
+                    it.value.apply {
+                        castValueToRequiredTypes<Destination.NoArgumentsDestination>()?.let {
+                            onSplashBtnClicked(it)
+                        }
+                    }
+                }
+
+                EmitType.NetworkError->{
+                    it.value.apply {
+                        castValueToRequiredTypes<String>()?.let {
+
+                        }
+                    }
+                }
+
+
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun handelDialogEvents() {
+       versionUpdateDialog.value?.onConfirm = {
+           it?.castValueToRequiredTypes<AppVersion>()?.apply {
+
+           }
+       }
+        versionUpdateDialog.value?.onDismiss = {
+            versionUpdateDialog.value?.setState(Dialog.Companion.State.DISABLE)
+            splashUseCases.navigateToAppropiateScreen().onEach {
+                when(it.type){
+
+                        EmitType.Navigate ->{
+                             it.value.apply {
+                                 castValueToRequiredTypes<Destination.NoArgumentsDestination>()?.let {
+                                     appNavigator.navigateTo(
+                                         it(),
+                                         popUpToRoute = Destination.SplashScreen(),
+                                          inclusive = true
+                                     )
+                                 }
+                             }
+                        }
+
+                    else -> {}
+                }
+            }.launchIn(viewModelScope)
+        }
+    }
+
+
 }

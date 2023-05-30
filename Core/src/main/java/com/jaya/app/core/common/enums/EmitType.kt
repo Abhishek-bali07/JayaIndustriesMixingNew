@@ -5,5 +5,7 @@ enum class EmitType {
     BackendError,
     NetworkError,
     IntroStatus,
+    Navigate,
+    Loading,
 
 }
