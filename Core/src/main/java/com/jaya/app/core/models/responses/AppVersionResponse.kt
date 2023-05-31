@@ -1,7 +1,9 @@
-package com.jaya.app.core.entities.responses
+package com.jaya.app.core.models.responses
+
 
 import com.google.gson.annotations.SerializedName
 import com.jaya.app.core.entities.AppVersion
+
 
 
 data class AppVersionResponse(

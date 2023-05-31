@@ -1,6 +1,6 @@
 package com.jaya.app.data.sources.online
 
-import com.jaya.app.core.entities.responses.AppVersionResponse
+import com.jaya.app.core.models.responses.AppVersionResponse
 import retrofit2.http.GET
 
 

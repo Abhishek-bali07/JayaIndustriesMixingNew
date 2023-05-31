@@ -19,7 +19,7 @@ sealed class Destination(
 
  object SplashScreen : NoArgumentsDestination(AppRoutes.SPLASH)
 
- object LoginScreen : NoArgumentsDestination(AppRoutes.LOGIN)
+ object MobileNumberScreen : NoArgumentsDestination(AppRoutes.MOBILE)
 
 }
 

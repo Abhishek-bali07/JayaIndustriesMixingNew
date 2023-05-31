@@ -9,7 +9,7 @@ import com.jaya.app.core.common.constants.Destination
 import com.jaya.app.core.utils.NavigationIntent
 import com.jaya.app.navigation.screen_transition.AppScreenTransitions
 import com.jaya.app.presentation.ui.screens.intro.SplashScreen
-import com.jaya.app.presentation.ui.screens.login.LoginScreen
+import com.jaya.app.presentation.ui.screens.login.MobileNumberScreen
 import com.jaya.app.presentation.ui.view_models.BaseViewModel
 import kotlinx.coroutines.channels.Channel
 
@@ -35,8 +35,8 @@ fun MainNavGraph(
             SplashScreen()
         }
 
-        composable(destination = Destination.LoginScreen){
-            LoginScreen()
+        composable(destination = Destination.MobileNumberScreen){
+           MobileNumberScreen()
         }
 
     }

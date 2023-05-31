@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">JayaIndustriesMixing</string>
+    <string name="version_update">Version Update</string>
+    <string name="update">Update App</string>
+    <string name="later">Later</string>
+    <string name="unable_to_open_play_store">Unable to open play store!!</string>
 </resources>

@@ -11,6 +11,7 @@ import com.jaya.app.core.common.enums.IntroStatus
 import com.jaya.app.core.entities.AppVersion
 import com.jaya.app.core.usecases.SplashUseCase
 import com.jaya.app.core.utils.AppNavigator
+import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.Dialog
 import com.jaya.app.presentation.states.castValueToRequiredTypes
 import com.jaya.app.utills.helper_impl.SavableMutableState
@@ -35,8 +36,8 @@ class SplashViewModel @Inject constructor(
 
    init {
        viewModelScope.launch {
-           checkIntroStatus()
            checkAppVersion()
+           checkIntroStatus()
 
        }
 
@@ -53,7 +54,9 @@ class SplashViewModel @Inject constructor(
 
 
     private suspend fun  checkIntroStatus(){
-        splashUseCases.checkIntroStatus().flowOn(Dispatchers.Default).collect{dataEntry ->
+        splashUseCases.checkIntroStatus()
+            .flowOn(Dispatchers.Default)
+            .collect{dataEntry ->
             when(dataEntry.type){
                 EmitType.IntroStatus->{
                     dataEntry.value.apply {
@@ -83,7 +86,9 @@ class SplashViewModel @Inject constructor(
 
 
     private suspend fun checkAppVersion(){
-        splashUseCases.checkAppVersion().flowOn(Dispatchers.IO).collect{
+        splashUseCases.checkAppVersion()
+            .flowOn(Dispatchers.IO)
+            .collect{
             when(it.type){
 
                 EmitType.BackendError ->{
@@ -99,10 +104,10 @@ class SplashViewModel @Inject constructor(
                         castValueToRequiredTypes<AppVersion>()?.let { appVersion ->
                             versionUpdateDialog.value = Dialog(
                                 data = DialogData(
-                                    title = "",
-                                    message = "",
-                                    positive = "",
-                                    negative = "",
+                                    title = R.string.version_update.toString(),
+                                    message = appVersion.versionMessage,
+                                    positive = R.string.update.toString(),
+                                    negative = R.string.later.toString(),
                                     data = appVersion
                                 )
                             )
@@ -133,6 +138,13 @@ class SplashViewModel @Inject constructor(
             }
         }
     }
+
+    val versionUpdateLink = SavableMutableState<String?>(
+        key = UiData.AppStoreLink,
+        savedStateHandle = savedStateHandle,
+        initialData = null
+    )
+
 
     private fun handelDialogEvents() {
        versionUpdateDialog.value?.onConfirm = {

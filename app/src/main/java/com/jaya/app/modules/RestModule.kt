@@ -31,7 +31,7 @@ object RestModule {
         ).build()
 
         return Retrofit.Builder()
-            .baseUrl("api.npoint.io")
+            .baseUrl("https://api.npoint.io")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build().create(klass)

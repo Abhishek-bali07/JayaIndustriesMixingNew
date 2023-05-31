@@ -37,14 +37,14 @@ class SplashUseCase @Inject constructor(
                                     emit(
                                         Data(
                                             type = EmitType.Navigate,
-                                            value = Destination.LoginScreen
+                                            value = Destination.MobileNumberScreen
                                         )
                                     )
                                 } else {
                                     emit(
                                         Data(
                                             type = EmitType.Navigate,
-                                            value = Destination.LoginScreen
+                                            value = Destination.MobileNumberScreen
                                         )
                                     )
                                 }
@@ -69,7 +69,7 @@ class SplashUseCase @Inject constructor(
 
     fun  navigateToAppropiateScreen() = flow<Data> {
         if (appStore.isLoggedIn()){
-            emit(Data(type = EmitType.Navigate, value = Destination.LoginScreen))
+            emit(Data(type = EmitType.Navigate, value = Destination.MobileNumberScreen))
         }else{
             emit(Data(type = EmitType.Navigate, value = Destination.SplashScreen))
         }
