@@ -74,7 +74,7 @@ class SplashViewModel @Inject constructor(
 
 
     fun onSplashBtnClicked(
-        destination: Destination.NoArgumentsDestination = Destination.LoginScreen
+        destination: Destination.NoArgumentsDestination = Destination.MobileNumberScreen
     ){
         appNavigator.tryNavigateTo(
             destination(),

@@ -4,4 +4,7 @@
     <string name="update">Update App</string>
     <string name="later">Later</string>
     <string name="unable_to_open_play_store">Unable to open play store!!</string>
+
+    <string name="welcome">Welcome to Jaya Industries</string>
+    <string name="loginhere">Login here</string>
 </resources>
