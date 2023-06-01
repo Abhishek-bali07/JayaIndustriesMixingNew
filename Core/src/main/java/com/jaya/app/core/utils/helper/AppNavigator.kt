@@ -1,4 +1,4 @@
-package com.jaya.app.core.utils
+package com.jaya.app.core.utils.helper
 
 import kotlinx.coroutines.channels.Channel
 

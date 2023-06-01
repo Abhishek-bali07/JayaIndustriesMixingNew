@@ -21,6 +21,9 @@ sealed class Destination(
 
  object MobileNumberScreen : NoArgumentsDestination(AppRoutes.MOBILE)
 
+
+ object OtpScreen : NoArgumentsDestination(AppRoutes.OTP)
+
 }
 
 private fun String.appendParams(vararg params: Pair<String, Any?>): String {

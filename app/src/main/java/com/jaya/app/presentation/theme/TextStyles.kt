@@ -20,7 +20,7 @@ data class TextStyles(
     ),
     val getStartedStyle: TextStyle = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_light)),
-        fontSize = 26.sp, color = Color.Black,
+        fontSize = 24.sp, color = Color.Black,
     ),
     val dialogHeadingStyle: TextStyle = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_bold)),

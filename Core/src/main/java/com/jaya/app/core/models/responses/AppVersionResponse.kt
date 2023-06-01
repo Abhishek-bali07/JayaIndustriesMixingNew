@@ -7,7 +7,6 @@ import com.jaya.app.core.entities.AppVersion
 
 
 data class AppVersionResponse(
-    @SerializedName("success")
     val status: Boolean,
     val message: String,
     val appVersion: AppVersion

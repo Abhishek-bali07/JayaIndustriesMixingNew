@@ -7,7 +7,7 @@ import androidx.navigation.NavBackStackEntry
 
 @OptIn(ExperimentalAnimationApi::class)
 sealed class AppScreenTransitions<T> {
-    object ScreenEnterTransition : AppScreenTransitions<AnimatedContentScope<NavBackStackEntry>>() {
+    object ScreenEnterTransition : AppScreenTransitions<AnimatedContentScope>() {
         operator fun invoke(backStackEntry: NavBackStackEntry): EnterTransition {
             return when(backStackEntry.destination.route) {
                 else -> {
@@ -21,7 +21,7 @@ sealed class AppScreenTransitions<T> {
     }
 
     object ScreenPopEnterTransition :
-        AppScreenTransitions<AnimatedContentScope<NavBackStackEntry>>() {
+        AppScreenTransitions<AnimatedContentScope>() {
         operator fun invoke(backStackEntry: NavBackStackEntry): EnterTransition {
             return when(backStackEntry.destination.route) {
                 else -> {
@@ -34,7 +34,7 @@ sealed class AppScreenTransitions<T> {
         }
     }
 
-    object ScreenExitTransition : AppScreenTransitions<AnimatedContentScope<NavBackStackEntry>>() {
+    object ScreenExitTransition : AppScreenTransitions<AnimatedContentScope>() {
         operator fun invoke(backStackEntry: NavBackStackEntry): ExitTransition {
             return when(backStackEntry.destination.route) {
                 else -> {
@@ -48,7 +48,7 @@ sealed class AppScreenTransitions<T> {
     }
 
     object ScreenPopExitTransition :
-        AppScreenTransitions<AnimatedContentScope<NavBackStackEntry>>() {
+        AppScreenTransitions<AnimatedContentScope>() {
         operator fun invoke(backStackEntry: NavBackStackEntry): ExitTransition {
             return when(backStackEntry.destination.route) {
                 else -> {

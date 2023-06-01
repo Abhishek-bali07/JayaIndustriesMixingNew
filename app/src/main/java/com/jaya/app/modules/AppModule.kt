@@ -3,8 +3,10 @@ package com.jaya.app.modules
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
+import com.jaya.app.core.domain.repositories.MobileRepository
 import com.jaya.app.core.domain.repositories.SplashRepository
 import com.jaya.app.core.utils.helper.AppStore
+import com.jaya.app.data.repositories.MobileRepositoryImpl
 import com.jaya.app.data.repositories.SplashRepositoryImpl
 import com.jaya.app.utills.helper_impl.AppStoreImpl
 import dagger.Binds
@@ -36,5 +38,8 @@ interface AppModule {
 
     @Binds
     fun bindAppStore(appStoreImpl: AppStoreImpl): AppStore
+
+    @Binds
+    fun bindMobileRepository(MobileRepository : MobileRepositoryImpl) : MobileRepository
 
 }

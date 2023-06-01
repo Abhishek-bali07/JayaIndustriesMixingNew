@@ -1,6 +1,6 @@
 package com.jaya.app.modules
 
-import com.jaya.app.core.utils.AppNavigator
+import com.jaya.app.core.utils.helper.AppNavigator
 import com.jaya.app.navigation.AppNavigatorImpl
 import dagger.Binds
 import dagger.Module

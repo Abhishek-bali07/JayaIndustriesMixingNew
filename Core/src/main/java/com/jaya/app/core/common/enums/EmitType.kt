@@ -7,5 +7,6 @@ enum class EmitType {
     IntroStatus,
     Navigate,
     Loading,
+    Inform,
 
 }

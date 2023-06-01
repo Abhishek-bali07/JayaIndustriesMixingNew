@@ -1,7 +1,7 @@
 package com.jaya.app.navigation
 
-import com.jaya.app.core.utils.AppNavigator
-import com.jaya.app.core.utils.NavigationIntent
+import com.jaya.app.core.utils.helper.AppNavigator
+import com.jaya.app.core.utils.helper.NavigationIntent
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import javax.inject.Inject

@@ -10,7 +10,7 @@ import com.jaya.app.core.common.enums.EmitType
 import com.jaya.app.core.common.enums.IntroStatus
 import com.jaya.app.core.entities.AppVersion
 import com.jaya.app.core.usecases.SplashUseCase
-import com.jaya.app.core.utils.AppNavigator
+import com.jaya.app.core.utils.helper.AppNavigator
 import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.Dialog
 import com.jaya.app.presentation.states.castValueToRequiredTypes
@@ -18,7 +18,6 @@ import com.jaya.app.utills.helper_impl.SavableMutableState
 import com.jaya.app.utills.helper_impl.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -50,32 +49,27 @@ class SplashViewModel @Inject constructor(
         initialData = IntroStatus.NOT_DONE
     )
 
-   val versionUpdateDialog = mutableStateOf<Dialog?>(null)
+    val versionUpdateDialog = mutableStateOf<Dialog?>(null)
 
 
-    private suspend fun  checkIntroStatus(){
+    private suspend fun checkIntroStatus() {
         splashUseCases.checkIntroStatus()
-            .flowOn(Dispatchers.Default)
-            .collect{dataEntry ->
-            when(dataEntry.type){
-                EmitType.IntroStatus->{
-                    dataEntry.value.apply {
-                        castValueToRequiredTypes<IntroStatus>()?.let {
-                            splashBtnStatus.setValue(it)
+            .flowOn(Dispatchers.Default).collect { dataEntry ->
+                when (dataEntry.type) {
+                    EmitType.IntroStatus -> {
+                        dataEntry.value?.apply {
+                            castValueToRequiredTypes<IntroStatus>()?.let {
+                                splashBtnStatus.setValue(it)
+                            }
                         }
                     }
+
+                    else -> {}
                 }
-                else -> {}
             }
-
-        }
-
     }
 
-
-    fun onSplashBtnClicked(
-        destination: Destination.NoArgumentsDestination = Destination.MobileNumberScreen
-    ){
+    fun onSplashBtClicked(destination: Destination.NoArgumentsDestination = Destination.MobileNumberScreen) {
         appNavigator.tryNavigateTo(
             destination(),
             popUpToRoute = Destination.SplashScreen(),
@@ -86,11 +80,8 @@ class SplashViewModel @Inject constructor(
 
 
     private suspend fun checkAppVersion(){
-        splashUseCases.checkAppVersion()
-            .flowOn(Dispatchers.IO)
-            .collect{
+        splashUseCases.checkAppVersion().flowOn(Dispatchers.IO).collect{
             when(it.type){
-
                 EmitType.BackendError ->{
                     it.value?.apply {
                         castValueToRequiredTypes<String>()?.let {
@@ -119,7 +110,7 @@ class SplashViewModel @Inject constructor(
                 EmitType.Navigate ->{
                     it.value.apply {
                         castValueToRequiredTypes<Destination.NoArgumentsDestination>()?.let {
-                            onSplashBtnClicked(it)
+                            onSplashBtClicked(it)
                         }
                     }
                 }
@@ -139,25 +130,24 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    val versionUpdateLink = SavableMutableState<String?>(
+    /*val versionUpdateLink = SavableMutableState<String?>(
         key = UiData.AppStoreLink,
         savedStateHandle = savedStateHandle,
         initialData = null
-    )
+    )*/
 
 
     private fun handelDialogEvents() {
        versionUpdateDialog.value?.onConfirm = {
            it?.castValueToRequiredTypes<AppVersion>()?.apply {
-
+              //  versionUpdateLink.setValue(link)
            }
        }
         versionUpdateDialog.value?.onDismiss = {
             versionUpdateDialog.value?.setState(Dialog.Companion.State.DISABLE)
             splashUseCases.navigateToAppropiateScreen().onEach {
                 when(it.type){
-
-                        EmitType.Navigate ->{
+                    EmitType.Navigate ->{
                              it.value.apply {
                                  castValueToRequiredTypes<Destination.NoArgumentsDestination>()?.let {
                                      appNavigator.navigateTo(

@@ -25,7 +25,7 @@ fun AppNavHost(
         startDestination = startDestination.fullRoute,
         modifier = modifier,
         route = route,
-        builder = builder
+        builder = builder,
     )
 }
 
