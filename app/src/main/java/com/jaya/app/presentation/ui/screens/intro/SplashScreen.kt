@@ -1,5 +1,6 @@
 package com.jaya.app.presentation.ui.screens.intro
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,31 +28,26 @@ import com.jaya.app.utills.helper_impl.SavableMutableState
 fun SplashScreen(
     splashViewModel: SplashViewModel = hiltViewModel(),
 
-){
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color(0xff4BB26D))
-                .statusBarColor(color = Color(0xff4BB26D)),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xff4BB26D))
+            .statusBarColor(color = Color(0xff4BB26D)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
 
 
-            ) {
-            SplashImageSection(R.drawable.jayalogo)
-            SplashDescriptionSection(
-                onClick = splashViewModel::onSplashBtClicked,
-                isBtnVisible = splashViewModel.splashBtnStatus,
-            )
-
-
-        }
-
+    ) {
+        SplashImageSection(R.drawable.jayalogo)
+        SplashDescriptionSection(
+            onClick = splashViewModel::onSplashBtClicked,
+            isBtnVisible = splashViewModel.splashBtnStatus,
+        )
+    }
 
 
 }
-
-
 
 
 @Composable
@@ -61,7 +57,8 @@ private fun ColumnScope.SplashDescriptionSection(
 ) {
 
     Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        modifier = Modifier.fillMaxSize().weight(2f), contentAlignment = Alignment.Center
+    ) {
         IconButton(
             onClick = onClick,
             modifier = Modifier
@@ -69,7 +66,7 @@ private fun ColumnScope.SplashDescriptionSection(
                 .size(60.dp)
                 .clip(CircleShape)
                 .background(color = Color(0xff4BB26D)),
-        ){
+        ) {
             Icon(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = "",
@@ -82,18 +79,15 @@ private fun ColumnScope.SplashDescriptionSection(
 }
 
 @Composable
-private  fun  ColumnScope.SplashImageSection(splash: Int){
+private fun ColumnScope.SplashImageSection(@DrawableRes splash: Int) {
     Box(
-        modifier = Modifier.weight(1f),
-        contentAlignment = Alignment.Center){
+        modifier = Modifier.weight(2f),
+        contentAlignment = Alignment.BottomEnd
+    ) {
         Image(
             painter = painterResource(id = splash),
             contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth(fraction = .8f)
-
-
-
+            modifier = Modifier.fillMaxSize(fraction = 0.7f)
         )
     }
 }

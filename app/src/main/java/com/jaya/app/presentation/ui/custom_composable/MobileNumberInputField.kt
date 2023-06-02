@@ -26,7 +26,7 @@ import com.jaya.app.presentation.theme.appTextStyles
 
 @UiComposable
 @Composable
-internal fun MobileNumberInputField(
+internal fun  MobileNumberInputField(
     onNumberChange: (String) -> Unit,
     modifier: Modifier,
     textFieldColors: TextFieldColors,

@@ -5,6 +5,7 @@ enum class UiData {
     AppStoreLink,
     LoginContinueBtnEnable,
     LoginApiLoading,
+    DriverOtpInput,
 
 
 }

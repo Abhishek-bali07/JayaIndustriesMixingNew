@@ -106,12 +106,9 @@ class SplashViewModel @Inject constructor(
                         }
                     }
                 }
-
                 EmitType.Navigate ->{
-                    it.value.apply {
-                        castValueToRequiredTypes<Destination.NoArgumentsDestination>()?.let {
-                            onSplashBtClicked(it)
-                        }
+                    it.value?.castValueToRequiredTypes<Destination.NoArgumentsDestination>()?.let {
+                        onSplashBtClicked(it)
                     }
                 }
 

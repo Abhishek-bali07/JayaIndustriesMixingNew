@@ -2,10 +2,7 @@ package com.bsquare.app.presentation.ui.custom_composable
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -48,7 +45,7 @@ fun AppButton (
                     pressedElevation = 10.dp,
                     defaultElevation = 7.dp
                 ),
-                shape = RoundedCornerShape(4.dp),
+                shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Black
                 ),
