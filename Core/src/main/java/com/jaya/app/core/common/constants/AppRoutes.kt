@@ -4,5 +4,6 @@ object AppRoutes {
     const val SPLASH = "splash"
     const val MOBILE = "mobile"
     const val OTP = "otp"
+    const val DASHBOARD = "dashboard"
 
 }

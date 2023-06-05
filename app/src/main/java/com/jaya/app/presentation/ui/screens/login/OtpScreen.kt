@@ -2,7 +2,10 @@ package com.jaya.app.presentation.ui.screens.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -11,29 +14,30 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bsquare.app.presentation.ui.custom_composable.AppButton
 import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.resourceString
 import com.jaya.app.presentation.theme.appTextStyles
 import com.jaya.app.presentation.ui.custom_composable.PinView
-import com.jaya.app.presentation.ui.view_models.OtpViewModel
+import com.jaya.app.presentation.ui.view_models.MobileViewModel
 
 @Composable
 fun OtpScreen(
-    otpViewModel : OtpViewModel = hiltViewModel()
+    mobileViewModel: MobileViewModel = hiltViewModel()
 ){
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            OtpScreenCoverSection()
-            OtpInputSection(otpViewModel)
+
+            OtpInputSection(mobileViewModel)
         }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun ColumnScope.OtpInputSection(otpViewModel: OtpViewModel) {
+private fun ColumnScope.OtpInputSection(mobileViewModel: MobileViewModel) {
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -44,45 +48,45 @@ private fun ColumnScope.OtpInputSection(otpViewModel: OtpViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        PinView(
-            pinText = otpViewModel ,
-            onPinTextChange = )
-    }
-
-}
-
-@Composable
-private  fun ColumnScope.OtpScreenCoverSection() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.jayalogo),
-            contentDescription ="",
-            modifier = Modifier
-                .fillMaxWidth(fraction = .8f)
-                .weight(3f),
-            alignment = Alignment.BottomCenter
+        Text(
+            text = R.string.verifyOtp.resourceString(),
+            style = MaterialTheme.appTextStyles.getStartedStyle,
         )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(fraction = .9f)
-                .weight(3f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ){
+
+        TextField(
+            value = mobileViewModel.mobileNumber.value,
+            onValueChange = {
+                mobileViewModel.onNumberChange(it)
+            }
+        )
+
+        PinView(
+            pinText = mobileViewModel.otp.value,
+            onPinTextChange = {
+               mobileViewModel.onOtp(it)
+                if(mobileViewModel.otp.value.length == 4){
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+
+                }
+            }
+        )
+
+
+        TextButton(onClick = mobileViewModel::resendOtp) {
             Text(
-                text = R.string.welcome.resourceString(),
-                style = androidx.compose.material.MaterialTheme.appTextStyles.getStartedStyle
-            )
-            Text(
-                text = R.string.verifyOtp.resourceString(),
-                style = androidx.compose.material.MaterialTheme.appTextStyles.getStartedStyle,
+                text = R.string.resendOtp.resourceString(),
+                style = MaterialTheme.appTextStyles.resendCodeStyle
             )
         }
+        AppButton(
+            enable = mobileViewModel.venableBtn.value,
+            loading = mobileViewModel.loading.value,
+            action = mobileViewModel::appLogin,
+            name = R.string.verify
+        )
     }
+
 }
+
+

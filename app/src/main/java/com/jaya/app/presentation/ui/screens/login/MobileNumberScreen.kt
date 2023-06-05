@@ -55,7 +55,7 @@ private fun ColumnScope.MobileNumberInputSection(mobileViewModel: MobileViewMode
         AppButton(
             enable = mobileViewModel.enableBtn.value,
             loading = mobileViewModel.loginLoading.value,
-            action = mobileViewModel::appLogin,
+            action = mobileViewModel::otpSend,
             name = R.string.get_otp
         )
 

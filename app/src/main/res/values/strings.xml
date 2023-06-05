@@ -9,4 +9,6 @@
     <string name="loginhere">Login here</string>
     <string name="get_otp">Get OTP Verification</string>
     <string name="verifyOtp">Please Verify your OTP</string>
+    <string name="verify">Verify</string>
+    <string name="resendOtp">Resend OTP</string>
 </resources>

@@ -4,6 +4,8 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jaya.app.core.common.constants.AppRoutes.OTP
 import com.jaya.app.core.common.enums.EmitType
 import com.jaya.app.core.usecases.MobileUseCase
 import com.jaya.app.core.utils.helper.AppNavigator
@@ -13,6 +15,7 @@ import com.jaya.app.utills.helper_impl.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
 import com.jaya.app.core.common.constants.Destination
+import kotlinx.coroutines.flow.launchIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +25,12 @@ class MobileViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ): ViewModel(){
 
-   private var mobileNumber = ""
+   val mobileNumber = mutableStateOf("")
+
+
+    val loading = mutableStateOf(false)
+
+    val toastInform = mutableStateOf("")
 
     val toastNotify = mutableStateOf("")
 
@@ -40,17 +48,35 @@ class MobileViewModel @Inject constructor(
     )
 
     fun onNumberChange(number: String){
-        mobileNumber = number
+        mobileNumber.value = number
         enableBtn.setValue(
             derivedStateOf {
-                 mobileNumber.length == 10
+                 mobileNumber.value.length == 10
             }.value)
     }
 
 
 
-    fun appLogin(){
-        useCase.sendOtp(mobileNumber = mobileNumber).onEach {
+
+    val venableBtn = mutableStateOf(false)
+
+    fun onOtp(input: String){
+        otp.setValue(input)
+        venableBtn.value = otp.value.length == 4
+    }
+
+
+
+    val otp = SavableMutableState(
+        key = UiData.DriverOtpInput,
+        savedStateHandle = savedStateHandle,
+        initialData = ""
+    )
+
+
+
+    fun otpSend(){
+        useCase.sendOtp(mobileNumber = mobileNumber.value).onEach {
             when(it.type){
                 EmitType.Loading ->{
                     it.value?.apply {
@@ -88,6 +114,83 @@ class MobileViewModel @Inject constructor(
         }
 
     }
+
+    fun resendOtp(){
+        useCase.sendOtp(mobileNumber.value).onEach {
+
+            when(it.type){
+                    EmitType.Inform ->{
+                        it.value?.apply {
+                            castValueToRequiredTypes<String>()?.let {
+                                toastInform.value = it
+                            }
+                        }
+                    }
+                    EmitType.BackendError ->{
+                        it.value?.apply {
+                            castValueToRequiredTypes<String>()?.let {
+                                toastInform.value = it
+                            }
+                        }
+                    }
+                EmitType.NetworkError -> {
+                    it.value?.apply {
+                        castValueToRequiredTypes<String>()?.let {
+                            toastInform.value = it
+                        }
+                    }
+                }
+                else -> {}
+            }
+        }.launchIn(viewModelScope)
+    }
+
+
+    fun appLogin(){
+        useCase.verify(
+            mobileNumber = mobileNumber.value,
+            otp = otp.value
+        ).onEach {
+            when(it.type){
+                EmitType.Loading -> {
+                    it.value?.apply {
+                        castValueToRequiredTypes<Boolean>()?.let {
+                            loading.value = it
+                        }
+                    }
+                }
+                EmitType.Navigate -> {
+                    it.value?.apply {
+                        castValueToRequiredTypes<Destination.NoArgumentsDestination>()?.let {
+                            appNavigator.navigateTo(
+                                it(),
+                                popUpToRoute = Destination.MobileNumberScreen(),
+                                inclusive = true,
+                                isSingleTop = true
+                            )
+                        }
+                    }
+                }
+                EmitType.NetworkError -> {
+                    it.value?.apply {
+                        castValueToRequiredTypes<String>()?.let {
+                            toastInform.value = it
+                        }
+                    }
+                }
+                EmitType.BackendError -> {
+                    it.value?.apply {
+                        castValueToRequiredTypes<String>()?.let {
+                            toastInform.value = it
+                        }
+                    }
+                }
+                else -> {}
+            }
+        }.launchIn(viewModelScope)
+
+    }
+
 
 
 
