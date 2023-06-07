@@ -24,8 +24,8 @@ class MobileUseCase @Inject constructor(
                 response.data?.apply {
                     when(status){
                         true ->{
-                            emit(Data(type = EmitType.Inform, message))
-                            emit(Data(type = EmitType.Navigate, Destination.OtpScreen))
+                            emit(Data(type = EmitType.Inform, isSend))
+                           // emit(Data(type = EmitType.Navigate, Destination.OtpScreen))
                         }
 
                         else -> {

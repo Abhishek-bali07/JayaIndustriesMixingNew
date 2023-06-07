@@ -42,4 +42,5 @@ interface AppModule {
     @Binds
     fun bindMobileRepository(MobileRepository : MobileRepositoryImpl) : MobileRepository
 
+
 }

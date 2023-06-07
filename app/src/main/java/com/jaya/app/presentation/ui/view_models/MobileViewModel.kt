@@ -1,11 +1,12 @@
 package com.jaya.app.presentation.ui.view_models
 
+import android.util.Log
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jaya.app.core.common.constants.AppRoutes.OTP
+import com.jaya.app.core.common.constants.Destination
 import com.jaya.app.core.common.enums.EmitType
 import com.jaya.app.core.usecases.MobileUseCase
 import com.jaya.app.core.utils.helper.AppNavigator
@@ -13,9 +14,8 @@ import com.jaya.app.presentation.states.castValueToRequiredTypes
 import com.jaya.app.utills.helper_impl.SavableMutableState
 import com.jaya.app.utills.helper_impl.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.onEach
-import com.jaya.app.core.common.constants.Destination
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +33,8 @@ class MobileViewModel @Inject constructor(
     val toastInform = mutableStateOf("")
 
     val toastNotify = mutableStateOf("")
+
+    val  saveData = mutableStateOf<Boolean>(false)
 
     val loginLoading = SavableMutableState(
         key = UiData.LoginApiLoading,
@@ -76,23 +78,33 @@ class MobileViewModel @Inject constructor(
 
 
     fun otpSend(){
-        useCase.sendOtp(mobileNumber = mobileNumber.value).onEach {
+        useCase.sendOtp(mobileNumber = mobileNumber.value)
+            .onEach {
             when(it.type){
                 EmitType.Loading ->{
                     it.value?.apply {
                         castValueToRequiredTypes<Boolean>()?.let {
                             loginLoading.setValue(it)
+
+
+                        }
+                    }
+                }
+                EmitType.Inform ->{
+                    it.value?.apply {
+                        castValueToRequiredTypes<Boolean>()?.let {
+                            Log.d("TAGger", "otpSend: ${saveData.value}")
+                            saveData.value = it
+
                         }
                     }
                 }
                 EmitType.Navigate ->{
                     it.value?.apply {
-                        castValueToRequiredTypes<Destination.OtpScreen>()?.let { destination ->
-                          appNavigator.navigateTo(destination())
+                        castValueToRequiredTypes<Destination.OtpScreen>()?.let {
                         }
                     }
                 }
-
 
                 EmitType.NetworkError -> {
                     it.value?.apply {
@@ -112,6 +124,7 @@ class MobileViewModel @Inject constructor(
                 else -> {}
             }
         }
+            .launchIn(viewModelScope)
 
     }
 
@@ -164,7 +177,7 @@ class MobileViewModel @Inject constructor(
                         castValueToRequiredTypes<Destination.NoArgumentsDestination>()?.let {
                             appNavigator.navigateTo(
                                 it(),
-                                popUpToRoute = Destination.MobileNumberScreen(),
+                                popUpToRoute = Destination.DashboardScreen(),
                                 inclusive = true,
                                 isSingleTop = true
                             )

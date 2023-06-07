@@ -4,6 +4,9 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jaya.app.data.sources.online.AppVersionApi
+import com.jaya.app.data.sources.online.MobileVerifyApi
+import com.jaya.app.data.sources.online.SendOtpApi
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +44,17 @@ object RestModule {
     @Singleton
     fun provideAppVersionApi(@ApplicationContext appContext: Context): AppVersionApi =
         provideApi(appContext, AppVersionApi::class.java)
+
+
+    @Provides
+    @Singleton
+    fun provideMobileVrifyApi(@ApplicationContext appContext: Context): MobileVerifyApi =
+        provideApi(appContext, MobileVerifyApi::class.java)
+
+
+    @Provides
+    @Singleton
+    fun provideSendOtpApi(@ApplicationContext appContext: Context): SendOtpApi =
+        provideApi(appContext, SendOtpApi::class.java)
 
 }

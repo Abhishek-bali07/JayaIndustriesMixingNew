@@ -1,6 +1,7 @@
 package com.jaya.app.presentation.ui.screens.login
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -31,7 +32,14 @@ fun  MobileNumberScreen(
         verticalArrangement = Arrangement.Top
     ) {
         MobileScreenCoverSection()
-        MobileNumberInputSection(mobileViewModel)
+
+        if (mobileViewModel.saveData.value){
+            OtpScreen(mobileViewModel)
+
+        }else{
+            MobileNumberInputSection(mobileViewModel)
+        }
+
     }
 }
 
@@ -46,7 +54,9 @@ private fun ColumnScope.MobileNumberInputSection(mobileViewModel: MobileViewMode
 
         MobileNumberInputField(
             onNumberChange = mobileViewModel::onNumberChange,
-            modifier = Modifier.fillMaxWidth(fraction = .9f).padding(vertical = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth(fraction = .9f)
+                .padding(vertical = 10.dp),
             textFieldColors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color.Black,
                 backgroundColor = Color.Black.copy(alpha = .2f)
@@ -65,7 +75,7 @@ private fun ColumnScope.MobileNumberInputSection(mobileViewModel: MobileViewMode
 }
 
 @Composable
-private fun ColumnScope.MobileScreenCoverSection() {
+fun ColumnScope.MobileScreenCoverSection() {
     Column(modifier = Modifier
         .fillMaxWidth()
         .weight(1f),

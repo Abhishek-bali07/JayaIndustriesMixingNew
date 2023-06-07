@@ -31,13 +31,13 @@ const val PIN_VIEW_TYPE_BORDER = 1
 fun PinView(
     pinText: String,
     onPinTextChange: (String) -> Unit,
-    digitColor: Color = Color.Black,
-    digitSize: TextUnit = 25.sp,
+    digitColor: Color = Color.Black ,
+    digitSize: TextUnit = 24.sp,
     containerSize: Dp = digitSize.value.dp * 3,
     digitCount: Int = 4,
     type: Int = PIN_VIEW_TYPE_BORDER,
 ) {
-    BasicTextField(value = pinText,
+    BasicTextField( modifier = Modifier.padding(horizontal = 5.dp), value = pinText,
         onValueChange = onPinTextChange,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         cursorBrush = SolidColor(Color.Black),
@@ -49,7 +49,7 @@ fun PinView(
             ) {
                 repeat(digitCount) { index ->
                     DigitView(index, pinText, digitColor, digitSize, containerSize, type = type)
-                    Spacer(modifier = Modifier.width(18.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
                 }
             }
         })
@@ -71,12 +71,10 @@ private fun DigitView(
             .height(containerSize)
             .border(
                 width = 2.dp,
-                color = Color.Black,
-                shape = CircleShape
+                color = Color(0XFFC7C7C7),
+
             )
-            .clip(CircleShape)
-            .background(color =  Color.Black.copy(alpha = .3f))
-            .padding(16.dp)
+            .padding(10.dp)
     } else Modifier.width(containerSize)
 
     Column(

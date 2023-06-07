@@ -49,7 +49,7 @@ internal fun  MobileNumberInputField(
         },
         modifier = modifier,
         maxLines = 1,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(6.dp),
         textStyle = MaterialTheme.appTextStyles.mobileNumberStyle,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number,

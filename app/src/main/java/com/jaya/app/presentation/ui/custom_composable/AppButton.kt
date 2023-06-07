@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -39,8 +40,7 @@ fun AppButton (
             Button(
                 onClick = action,
                 modifier = Modifier
-                    .fillMaxWidth(fraction = 0.9f)
-                    .padding(bottom = screenHeight * 0.09f),
+                    .fillMaxWidth(fraction = 0.9f),
                 elevation = ButtonDefaults.elevation(
                     pressedElevation = 10.dp,
                     defaultElevation = 7.dp

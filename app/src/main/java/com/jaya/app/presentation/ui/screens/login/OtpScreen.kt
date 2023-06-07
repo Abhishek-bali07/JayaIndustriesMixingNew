@@ -2,7 +2,11 @@ package com.jaya.app.presentation.ui.screens.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -13,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bsquare.app.presentation.ui.custom_composable.AppButton
 import com.jaya.app.mixing.R
@@ -28,11 +35,36 @@ fun OtpScreen(
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
+
+            ImageSection()
 
             OtpInputSection(mobileViewModel)
         }
+}
+
+@Composable
+fun ColumnScope.ImageSection() {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .weight(1f),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally)
+    {
+        Image(
+            painter = painterResource(id =R.drawable.jayalogo),
+            contentDescription = "",
+            modifier = Modifier
+                .fillMaxWidth(fraction = .8f)
+                .padding(vertical = 20.dp)
+        )
+        androidx.compose.material.Text(
+            text = R.string.welcome.resourceString(),
+            style = MaterialTheme.appTextStyles.getStartedStyle
+        )
+
+    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -44,20 +76,36 @@ private fun ColumnScope.OtpInputSection(mobileViewModel: MobileViewModel) {
 
     Column(modifier = Modifier
         .fillMaxWidth()
-        .weight(1.5f),
+        .weight(1.2f),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = R.string.verifyOtp.resourceString(),
             style = MaterialTheme.appTextStyles.getStartedStyle,
         )
 
-        TextField(
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(fraction = .9f),
+            maxLines = 1,
+            shape = RoundedCornerShape(12.dp),
+            textStyle = MaterialTheme.appTextStyles.mobileNumberStyle,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
             value = mobileViewModel.mobileNumber.value,
             onValueChange = {
                 mobileViewModel.onNumberChange(it)
             }
+
+
+
         )
 
         PinView(
@@ -73,18 +121,20 @@ private fun ColumnScope.OtpInputSection(mobileViewModel: MobileViewModel) {
         )
 
 
-        TextButton(onClick = mobileViewModel::resendOtp) {
-            Text(
-                text = R.string.resendOtp.resourceString(),
-                style = MaterialTheme.appTextStyles.resendCodeStyle
-            )
-        }
+
         AppButton(
             enable = mobileViewModel.venableBtn.value,
             loading = mobileViewModel.loading.value,
             action = mobileViewModel::appLogin,
             name = R.string.verify
         )
+
+        TextButton(onClick = mobileViewModel::resendOtp) {
+            Text(
+                text = R.string.resendOtp.resourceString(),
+                style = MaterialTheme.appTextStyles.resendCodeStyle
+            )
+        }
     }
 
 }
