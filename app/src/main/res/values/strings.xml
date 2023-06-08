@@ -11,4 +11,8 @@
     <string name="verifyOtp">Please Verify your OTP</string>
     <string name="verify">Verify</string>
     <string name="resendOtp">Resend OTP</string>
+
+
+    <string name="dashboard">Dashboard</string>
+    <string name="logout">Logout</string>
 </resources>

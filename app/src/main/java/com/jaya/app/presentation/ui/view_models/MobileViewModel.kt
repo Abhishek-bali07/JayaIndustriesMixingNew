@@ -85,8 +85,6 @@ class MobileViewModel @Inject constructor(
                     it.value?.apply {
                         castValueToRequiredTypes<Boolean>()?.let {
                             loginLoading.setValue(it)
-
-
                         }
                     }
                 }
@@ -123,8 +121,7 @@ class MobileViewModel @Inject constructor(
 
                 else -> {}
             }
-        }
-            .launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
 
     }
 
