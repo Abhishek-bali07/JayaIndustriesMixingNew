@@ -21,16 +21,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaya.app.presentation.states.resourceImage
 import com.jaya.app.presentation.states.resourceString
 import com.jaya.app.presentation.theme.appTextStyles
 import com.jaya.app.presentation.ui.view_models.DashboardViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Composable
-fun AppBarContent(viewModel: DashboardViewModel) {
 
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,40 +55,29 @@ fun AppBarContent(viewModel: DashboardViewModel) {
             Column(modifier = Modifier.fillMaxWidth()) {}
         }
     }
+ }
 
- @Composable
- fun DrawerImageSection(@DrawableRes jayalogo: Int) {
+@Composable
+fun AppBarContent(viewModel: DashboardViewModel) {
+    val uiScope = rememberCoroutineScope()
 
-     Image(
-         painter = painterResource(id = jayalogo),
-         contentDescription = null,
-         modifier = Modifier.fillMaxSize(fraction = 0.4f)
-     )
+    TopAppBar(
+        modifier = Modifier.fillMaxWidth(),
+        backgroundColor = Color(0xffFFEB56),
+        contentPadding = PaddingValues(8.dp),
+    ) {
+        IconButton(onClick = {
+            uiScope.launch {
+            }
 
-    }
-
- @Composable
- fun AppBarContent(viewModel: DashboardViewModel) {
-
-        val uiScope = rememberCoroutineScope()
-
-       TopAppBar(
-           modifier = Modifier.fillMaxWidth(),
-           backgroundColor = Color(0xffFFEB56),
-           contentPadding = PaddingValues(8.dp),
-       ) {
-           IconButton(onClick = {
-               uiScope.launch {
-           }
-
-           }) {
-               Icon(
-                   imageVector = Icons.Default.Menu,
-                   contentDescription = "",
-                   tint = Color.White,
-                   modifier = Modifier.size(35.dp)
-               )
-           }
+        }) {
+            Icon(
+                imageVector = Icons.Default.Menu,
+                contentDescription = "",
+                tint = Color.White,
+                modifier = Modifier.size(35.dp)
+            )
+        }
 
 
 
@@ -98,21 +85,33 @@ fun AppBarContent(viewModel: DashboardViewModel) {
 
 
 
-           IconButton(onClick = {
-               uiScope.launch {
-               }
+        IconButton(onClick = {
+            uiScope.launch {
+            }
 
-           }) {
-               Icon(
-                   imageVector = Icons.Default.Menu,
-                   contentDescription = "",
-                   tint = Color.White,
-                   modifier = Modifier.size(35.dp)
-               )
-           }
+        }) {
+            Icon(
+                painter = R.drawable.bell.resourceImage(),
+                contentDescription ="" ,
+                modifier = Modifier.size(35.dp)
+                )
 
         }
+
     }
+}
+
+
+
+@Composable
+fun DrawerImageSection(@DrawableRes jayalogo: Int) {
+
+    Image(
+        painter = painterResource(id = jayalogo),
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(fraction = 0.8f)
+    )
+
 }
 
 @Composable
