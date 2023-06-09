@@ -15,4 +15,5 @@
 
     <string name="dashboard">Dashboard</string>
     <string name="logout">Logout</string>
+    <string name="todayStatus">Today Status</string>
 </resources>

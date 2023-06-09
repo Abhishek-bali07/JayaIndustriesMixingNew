@@ -2,25 +2,20 @@ package com.jaya.app.presentation.ui.screens.dashboard
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material.Scaffold
-import com.jaya.app.mixing.R
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.resourceImage
 import com.jaya.app.presentation.states.resourceString
 import com.jaya.app.presentation.theme.appTextStyles
@@ -29,8 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
  fun DashBoardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
@@ -48,14 +42,33 @@ import kotlinx.coroutines.launch
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Cyan)
                 .padding(paddingValues),
             contentAlignment = Alignment.BottomCenter
         ) {
-            Column(modifier = Modifier.fillMaxWidth()) {}
+            Column(modifier = Modifier.fillMaxWidth()) {
+                StatusSection(viewModel)
+            }
         }
     }
  }
+
+@Composable
+fun StatusSection(viewModel: DashboardViewModel) {
+    
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+
+       Text(
+           text = "Today Status",
+           color = Color.Black, fontWeight = F
+
+       )
+        
+    }
+
+}
 
 @Composable
 fun AppBarContent(viewModel: DashboardViewModel) {
@@ -74,7 +87,7 @@ fun AppBarContent(viewModel: DashboardViewModel) {
             Icon(
                 imageVector = Icons.Default.Menu,
                 contentDescription = "",
-                tint = Color.White,
+                tint = Color.Black,
                 modifier = Modifier.size(35.dp)
             )
         }
@@ -93,6 +106,7 @@ fun AppBarContent(viewModel: DashboardViewModel) {
             Icon(
                 painter = R.drawable.bell.resourceImage(),
                 contentDescription ="" ,
+                tint = Color.Black,
                 modifier = Modifier.size(35.dp)
                 )
 
