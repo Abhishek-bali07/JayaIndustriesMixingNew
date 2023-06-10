@@ -5,6 +5,7 @@ import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jaya.app.data.sources.online.AppVersionApi
 import com.jaya.app.data.sources.online.MobileVerifyApi
+import com.jaya.app.data.sources.online.RecentProductionApi
 import com.jaya.app.data.sources.online.SendOtpApi
 
 import dagger.Module
@@ -56,5 +57,10 @@ object RestModule {
     @Singleton
     fun provideSendOtpApi(@ApplicationContext appContext: Context): SendOtpApi =
         provideApi(appContext, SendOtpApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRecentProductionApi(@ApplicationContext appContext: Context): RecentProductionApi =
+        provideApi(appContext, RecentProductionApi::class.java)
 
 }

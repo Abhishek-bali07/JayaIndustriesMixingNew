@@ -9,6 +9,7 @@ import com.jaya.app.core.common.constants.Destination
 import com.jaya.app.core.utils.helper.NavigationIntent
 import com.jaya.app.navigation.screen_transition.AppScreenTransitions
 import com.jaya.app.presentation.ui.screens.dashboard.DashBoardScreen
+import com.jaya.app.presentation.ui.screens.dashboard.ProductionDetailScreen
 import com.jaya.app.presentation.ui.screens.intro.SplashScreen
 import com.jaya.app.presentation.ui.screens.login.MobileNumberScreen
 import com.jaya.app.presentation.ui.screens.login.OtpScreen
@@ -49,6 +50,10 @@ fun MainNavGraph(
 
         composable(destination = Destination.DashboardScreen){
             DashBoardScreen()
+        }
+
+        composable(destination = Destination.ProductionDetailScreen){
+            ProductionDetailScreen()
         }
 
     }

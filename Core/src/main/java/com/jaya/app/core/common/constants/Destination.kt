@@ -1,6 +1,7 @@
 package com.jaya.app.core.common.constants
 
 import android.util.Log
+import com.jaya.app.core.common.constants.Destination.DashboardScreen.productionId_KEY
 
 sealed class Destination(
  protected val route: String,
@@ -25,7 +26,16 @@ sealed class Destination(
  object OtpScreen : NoArgumentsDestination(AppRoutes.OTP)
 
 
- object DashboardScreen : NoArgumentsDestination(AppRoutes.DASHBOARD)
+ object DashboardScreen : Destination(AppRoutes.DASHBOARD, "production_Id"){
+  const val productionId_KEY = "production_Id"
+  operator  fun  invoke(productionId: String): String = route.appendParams(
+   productionId_KEY  to productionId
+  )
+ }
+
+ object ProductionDetailScreen :NoArgumentsDestination(AppRoutes.DETAILSCREEN)
+
+
 
 }
 

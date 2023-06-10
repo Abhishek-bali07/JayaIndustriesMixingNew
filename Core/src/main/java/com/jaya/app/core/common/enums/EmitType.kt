@@ -8,5 +8,6 @@ enum class EmitType {
     Navigate,
     Loading,
     Inform,
+    ProductionItem,
 
 }
