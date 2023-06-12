@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bsquare.app.presentation.ui.custom_composable.AppButton
+import com.jaya.app.core.entities.Production
 import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.resourceString
 import com.jaya.app.presentation.theme.appTextStyles
@@ -31,29 +32,31 @@ import com.jaya.app.presentation.ui.view_models.MobileViewModel
 @Composable
 fun OtpScreen(
     mobileViewModel: MobileViewModel = hiltViewModel()
-){
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
 
-            ImageSection()
+        ImageSection()
 
-            OtpInputSection(mobileViewModel)
-        }
+        OtpInputSection(mobileViewModel)
+    }
 }
 
 @Composable
 fun ColumnScope.ImageSection() {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .weight(1f),
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f),
         verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally)
+        horizontalAlignment = Alignment.CenterHorizontally
+    )
     {
         Image(
-            painter = painterResource(id =R.drawable.jayalogo),
+            painter = painterResource(id = R.drawable.jayalogo),
             contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth(fraction = .8f)
@@ -74,9 +77,10 @@ private fun ColumnScope.OtpInputSection(mobileViewModel: MobileViewModel) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .weight(1.2f),
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .weight(1.2f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -105,14 +109,13 @@ private fun ColumnScope.OtpInputSection(mobileViewModel: MobileViewModel) {
             }
 
 
-
         )
 
         PinView(
             pinText = mobileViewModel.otp.value,
             onPinTextChange = {
-               mobileViewModel.onOtp(it)
-                if(mobileViewModel.otp.value.length == 4){
+                mobileViewModel.onOtp(it)
+                if (mobileViewModel.otp.value.length == 4) {
                     focusManager.clearFocus()
                     keyboardController?.hide()
 
@@ -125,7 +128,9 @@ private fun ColumnScope.OtpInputSection(mobileViewModel: MobileViewModel) {
         AppButton(
             enable = mobileViewModel.venableBtn.value,
             loading = mobileViewModel.loading.value,
-            action = mobileViewModel::appLogin,
+            action = {
+                mobileViewModel.appLogin()
+            },
             name = R.string.verify
         )
 

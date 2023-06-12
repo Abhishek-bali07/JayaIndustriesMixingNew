@@ -1,7 +1,7 @@
 package com.jaya.app.core.entities
 
 data class Production(
-    val id: String,
+    val productId: String,
     val productName:String,
     val quantity: String,
     val productTime: String,

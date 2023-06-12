@@ -33,7 +33,7 @@ class DashboardViewModel @Inject constructor(
 
 
 
-    private val productionId = savedStateHandle.get<String>(Destination.DashboardScreen.productionId_KEY)
+
 
 
     val recentProduction = mutableStateListOf<Production>()
@@ -80,10 +80,11 @@ class DashboardViewModel @Inject constructor(
       }.launchIn(viewModelScope)
     }
 
-    fun onCardClicked(){
+    fun onCardClicked(production: Production){
+ //       val id = productionId ?: ""
         appNavigator.tryNavigateTo(
-            Destination.ProductionDetailScreen(),
-            popUpToRoute = Destination.DashboardScreen(productionId =  productionId),
+            Destination.ProductionDetailScreen(productId = production.productId),
+            popUpToRoute = Destination.DashboardScreen(),
             inclusive = false,
             isSingleTop = true
         )

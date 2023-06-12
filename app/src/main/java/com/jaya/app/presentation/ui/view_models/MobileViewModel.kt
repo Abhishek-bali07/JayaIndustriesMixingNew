@@ -2,12 +2,14 @@ package com.jaya.app.presentation.ui.view_models
 
 import android.util.Log
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaya.app.core.common.constants.Destination
 import com.jaya.app.core.common.enums.EmitType
+import com.jaya.app.core.entities.Production
 import com.jaya.app.core.usecases.MobileUseCase
 import com.jaya.app.core.utils.helper.AppNavigator
 import com.jaya.app.presentation.states.castValueToRequiredTypes
@@ -35,6 +37,9 @@ class MobileViewModel @Inject constructor(
     val toastNotify = mutableStateOf("")
 
     val  saveData = mutableStateOf<Boolean>(false)
+
+
+    val production = mutableStateListOf<Production>()
 
     val loginLoading = SavableMutableState(
         key = UiData.LoginApiLoading,
@@ -156,7 +161,8 @@ class MobileViewModel @Inject constructor(
     }
 
 
-    fun appLogin(){
+    fun appLogin(
+          ){
         useCase.verify(
             mobileNumber = mobileNumber.value,
             otp = otp.value

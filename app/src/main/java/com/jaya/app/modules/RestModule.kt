@@ -3,10 +3,7 @@ package com.jaya.app.modules
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.jaya.app.data.sources.online.AppVersionApi
-import com.jaya.app.data.sources.online.MobileVerifyApi
-import com.jaya.app.data.sources.online.RecentProductionApi
-import com.jaya.app.data.sources.online.SendOtpApi
+import com.jaya.app.data.sources.online.*
 
 import dagger.Module
 import dagger.Provides
@@ -63,4 +60,9 @@ object RestModule {
     fun provideRecentProductionApi(@ApplicationContext appContext: Context): RecentProductionApi =
         provideApi(appContext, RecentProductionApi::class.java)
 
+
+    @Provides
+    @Singleton
+    fun provideProductDetailsApi(@ApplicationContext appContext: Context) : ProductDetailsApi =
+        provideApi(appContext, ProductDetailsApi::class.java)
 }

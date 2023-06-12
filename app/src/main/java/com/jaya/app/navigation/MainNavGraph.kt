@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.jaya.app.core.common.constants.Destination
+import com.jaya.app.core.entities.Production
 import com.jaya.app.core.utils.helper.NavigationIntent
 import com.jaya.app.navigation.screen_transition.AppScreenTransitions
 import com.jaya.app.presentation.ui.screens.dashboard.DashBoardScreen
@@ -27,7 +28,7 @@ fun MainNavGraph(
     navHostController.NavEffects(navigationChannel)
     AppNavHost(
             navController = navHostController,
-            startDestination = Destination.DashboardScreen,
+            startDestination = Destination.ProductionDetailScreen,
             modifier = Modifier.padding(paddingValues),
             enterTransition = AppScreenTransitions.ScreenEnterTransition,
             popEnterTransition = AppScreenTransitions.ScreenPopEnterTransition,
@@ -53,7 +54,7 @@ fun MainNavGraph(
         }
 
         composable(destination = Destination.ProductionDetailScreen){
-            ProductionDetailScreen()
+            ProductionDetailScreen(baseViewModel)
         }
 
     }

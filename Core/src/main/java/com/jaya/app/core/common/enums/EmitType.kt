@@ -9,5 +9,6 @@ enum class EmitType {
     Loading,
     Inform,
     ProductionItem,
+    ProductDetails,
 
 }

@@ -5,10 +5,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
 import com.jaya.app.core.domain.repositories.DashboardRepository
 import com.jaya.app.core.domain.repositories.MobileRepository
+import com.jaya.app.core.domain.repositories.ProductDetailRepository
 import com.jaya.app.core.domain.repositories.SplashRepository
 import com.jaya.app.core.utils.helper.AppStore
 import com.jaya.app.data.repositories.DashboardRepositoryImpl
 import com.jaya.app.data.repositories.MobileRepositoryImpl
+import com.jaya.app.data.repositories.ProductDetailRepositoryImpl
 import com.jaya.app.data.repositories.SplashRepositoryImpl
 import com.jaya.app.utills.helper_impl.AppStoreImpl
 import dagger.Binds
@@ -46,6 +48,10 @@ interface AppModule {
 
     @Binds
     fun bindDashboardRepository(DashDashboardRepository : DashboardRepositoryImpl): DashboardRepository
+
+
+    @Binds
+    fun  bindProductDetailRepository(ProductDetailRepository : ProductDetailRepositoryImpl):ProductDetailRepository
 
 
 }
