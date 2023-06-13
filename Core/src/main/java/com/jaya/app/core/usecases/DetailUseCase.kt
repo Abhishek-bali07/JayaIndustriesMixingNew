@@ -15,7 +15,6 @@ class DetailUseCase @Inject constructor(
      fun InitialDetails(productId:String) = flow<Data> {
           emit(Data(EmitType.Loading, value = true))
           when(val response = repository.getInitialData(productId, prefs.userId())){
-
                is Resource.Success ->{
                     emit(Data(EmitType.Loading, false))
                     response.data?.apply {

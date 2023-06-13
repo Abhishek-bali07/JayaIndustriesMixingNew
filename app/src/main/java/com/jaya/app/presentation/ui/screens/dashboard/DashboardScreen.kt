@@ -122,7 +122,7 @@ fun RecentProductionList(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { viewModel::onCardClicked }
+                    .clickable { viewModel.onCardClicked(item) }
                     .padding(10.dp)
                     .height(150.dp), elevation = 5.dp,
             ) {

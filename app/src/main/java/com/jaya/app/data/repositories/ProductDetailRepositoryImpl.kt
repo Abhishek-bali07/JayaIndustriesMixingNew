@@ -1,5 +1,6 @@
 package com.jaya.app.data.repositories
 
+import android.util.Log
 import com.jaya.app.core.common.constants.Resource
 import com.jaya.app.core.domain.repositories.ProductDetailRepository
 import com.jaya.app.core.models.responses.ProductDetailResponse
@@ -16,13 +17,16 @@ class ProductDetailRepositoryImpl @Inject constructor(
         productId: String
     ): Resource<ProductDetailResponse> {
       return  try {
-       val result = productDetailsApi.getProductDetails();
+       val result = productDetailsApi.getProductDetails()
        Resource.Success(result)
       }catch (ex: HttpException) {
+          Log.d("TAGGING", "getInitialData: ${ex.message}")
           Resource.Error(ex.message())
       } catch (ex: IOException) {
+          Log.d("Debugging", "getInitialData: ${ex.message}")
           Resource.Error(ex.message.toString())
       } catch (ex: Exception) {
+          Log.d("Message", "getInitialData: ${ex.message}")
           Resource.Error(ex.message.toString())
       }
     }

@@ -14,4 +14,7 @@ class BaseViewModel @Inject constructor(
 
 
     var refreshLoadDataArg = mutableStateOf(false)
+
+
+    var productionDataLoadArg = mutableStateOf("")
 }

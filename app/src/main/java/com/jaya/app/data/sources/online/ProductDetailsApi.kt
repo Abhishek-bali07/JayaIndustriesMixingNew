@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface ProductDetailsApi {
 
-    @GET("/cdfd6c14dd5381ac3fc5")
+    @GET("/65334f71bfbdef79157f")
     suspend fun  getProductDetails(): ProductDetailResponse
 }

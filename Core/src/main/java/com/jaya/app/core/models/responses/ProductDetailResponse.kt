@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.jaya.app.core.entities.ProductionDetailData
 
 data class ProductDetailResponse(
-    @SerializedName("success")
+
     val status: Boolean,
     val message: String,
     val details: ProductionDetailData
