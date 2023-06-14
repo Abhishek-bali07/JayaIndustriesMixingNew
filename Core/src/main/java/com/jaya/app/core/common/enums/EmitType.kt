@@ -10,5 +10,6 @@ enum class EmitType {
     Inform,
     ProductionItem,
     ProductDetails,
+    IngredientAdded,
 
 }

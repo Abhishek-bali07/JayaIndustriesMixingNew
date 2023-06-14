@@ -33,4 +33,24 @@ class DetailUseCase @Inject constructor(
                else -> {}
           }
      }
+
+
+
+    /* fun  addIngredents(productId: String, ingName: String, ingQty:String) = flow<Data>{
+          emit(Data(EmitType.Loading, value = true))
+          when(val response = repository.addIngredentsData(productId, prefs.userId(), ingName, ingQty)){
+               is Resource.Success ->{
+                    emit(Data(EmitType.Loading, false))
+                    response.data?.apply {
+                         when(status && isAdded){
+                              true ->{
+                                   emit(Data(type = EmitType.IngredientAdded, value = this.isAdded))
+                              }
+                              else -> {emit(Data(EmitType.BackendError, message))}
+                         }
+                    }
+               }
+               else -> {}
+          }
+     }*/
 }

@@ -6,4 +6,7 @@ import com.jaya.app.core.models.responses.ProductDetailResponse
 interface ProductDetailRepository {
 
     suspend fun  getInitialData(userId: String, productId: String):Resource<ProductDetailResponse>
+
+
+
 }

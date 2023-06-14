@@ -16,4 +16,5 @@
     <string name="dashboard">Dashboard</string>
     <string name="logout">Logout</string>
     <string name="todayStatus">Today Status</string>
+    <string name="mixing">Mixing Ingredients</string>
 </resources>

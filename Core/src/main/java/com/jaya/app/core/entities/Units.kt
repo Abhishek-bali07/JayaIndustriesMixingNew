@@ -1,7 +1,7 @@
 package com.jaya.app.core.entities
 
 data class Units(
-    val unitsName:String,
-    val unitsId:String,
+    val unitName:String,
+    val unitId:String,
     val isSelected: Boolean
 )

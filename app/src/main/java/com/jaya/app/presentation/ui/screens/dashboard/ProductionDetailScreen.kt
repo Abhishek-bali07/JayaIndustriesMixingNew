@@ -7,13 +7,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import com.jaya.app.mixing.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -22,8 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.ComposeLaunchEffect
 import com.jaya.app.presentation.states.resourceImage
+import com.jaya.app.presentation.states.resourceString
 import com.jaya.app.presentation.ui.view_models.BaseViewModel
 import com.jaya.app.presentation.ui.view_models.ProductionViewModel
 import java.util.*
@@ -83,6 +86,7 @@ fun ProductionDetailScreen(
 
                     ProductTimeSection(detailViewModel)
                     ProductQuantitySection(detailViewModel,baseViewModel)
+                    MixingIngredentSection(detailViewModel, baseViewModel)
 
 
 
@@ -100,13 +104,314 @@ fun ProductionDetailScreen(
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun MixingIngredentSection(
+    detailViewModel: ProductionViewModel,
+    baseViewModel: BaseViewModel
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Top
+    ) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = R.string.mixing.resourceString(), style = TextStyle(
+                fontWeight = FontWeight.W500,
+                fontSize = 20.sp
+            ))
+
+
+
+            Surface(modifier = Modifier
+                .size(width = 100.dp, height = 30.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(color = Color(0xff68B560)),
+                onClick = {
+
+                }
+            ) {
+                Row(
+                    modifier = Modifier.background(color =  Color(0xff68B560)),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = Modifier.padding(
+                            vertical = 3.dp, horizontal = 5.dp
+                        ),
+                        text = "Add",
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .background(color = Color(0xff68B560))
+                            .size(20.dp),
+                        painter = R.drawable.plus.resourceImage(),
+                        contentDescription = "null", tint = Color.White
+                    )
+
+
+                }
+
+            }
+
+
+        }
+
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp),
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 10.dp)
+                    .size(height = 54.dp, width = 100.dp),
+                value =detailViewModel.ingredentName.value ,
+                onValueChange = detailViewModel::onChangeIngredentName)
+
+            Surface(
+                modifier = Modifier.weight(1f))
+            {
+                Row(
+                    modifier = Modifier
+                        .padding(5.dp)
+
+                ) {
+                    Surface(
+
+                        modifier = Modifier
+                            .fillMaxWidth().padding(vertical = 5.dp)
+                            .height(55.dp)
+                            .border(border = BorderStroke(width = 2.dp, color = Color(0xffB9B9B9)))
+                            .background(color = Color.White.copy(alpha = .5f))
+
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.End                   ,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            OutlinedTextField(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .size(height = 54.dp, width = 100.dp),
+                                value =detailViewModel.ingredentQtty.value ,
+                                onValueChange = detailViewModel::onChangeIngredentQtty,
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = Color(0xffB9B9B9),
+                                    unfocusedBorderColor = Color(0xffB9B9B9)
+                                ))
+                            Divider(
+                                color = Color(0xffB9B9B9),
+                                modifier = Modifier
+                                    .fillMaxHeight()  //fill the max height
+                                    .width(2.dp)
+                            )
+
+                            Text(
+                                modifier = Modifier.padding(
+                                    vertical = 3.dp, horizontal = 5.dp),
+
+                                text = detailViewModel.ingredentUnit.value,
+                                style = TextStyle(
+                                    color = Color(0xff212121),
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                            )
+                            IconButton(onClick = {
+                                detailViewModel.isIngredentsUnitExpanded.value =
+                                    !detailViewModel.isIngredentsUnitExpanded.value
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowDropDown, contentDescription = ""
+                                )
+                            }
+                        }
+                    }
+
+                    DropdownMenu(expanded = detailViewModel.isIngredentsUnitExpanded.value,
+                        onDismissRequest = { detailViewModel.isIngredentsUnitExpanded.value = false }) {
+                        detailViewModel.productDetails.value?.unit?.forEach { text ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    baseViewModel.refreshLoadDataArg.value = true
+                                    detailViewModel.ingredentUnit.value = text.unitName
+                                    detailViewModel.isIngredentsUnitExpanded.value = false
+                                }) {
+                                Text(text = text.unitName)
+                            }
+
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+
+
+}
+
 @Composable
 fun ProductQuantitySection(
     detailViewModel: ProductionViewModel,
     baseViewModel: BaseViewModel
 ) {
+    Surface(modifier = Modifier) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 10.dp,
+                    vertical = 10.dp
+                ))
+        {
 
-    Row(
+            OutlinedTextField(modifier = Modifier.height(55.dp),
+                value = detailViewModel.quantityName.value,
+                onValueChange =detailViewModel::onChangeQuantityName,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color(0xffB9B9B9),
+                    unfocusedBorderColor = Color(0xffB9B9B9)
+                )
+            )
+
+            Row(
+                modifier = Modifier
+                    .padding(5.dp)
+
+            ) {
+                Surface(
+
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .border(border = BorderStroke(width = 2.dp, color = Color(0xffB9B9B9)))
+                        .background(color = Color.White.copy(alpha = .5f))
+
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.End                   ,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+
+                        Text(
+                            modifier = Modifier.padding(
+                                vertical = 3.dp, horizontal = 5.dp),
+
+                            text = detailViewModel.selectedUnit.value,
+                            style = TextStyle(
+                                color = Color(0xff212121),
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                        )
+                        IconButton(onClick = {
+                            detailViewModel.isUnitExpanded.value =
+                                !detailViewModel.isUnitExpanded.value
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowDropDown, contentDescription = ""
+                            )
+                        }
+                    }
+                }
+
+                DropdownMenu(expanded = detailViewModel.isUnitExpanded.value,
+                    onDismissRequest = { detailViewModel.isUnitExpanded.value = false }) {
+                    detailViewModel.productDetails.value?.unit?.forEach { text ->
+                        DropdownMenuItem(
+                            onClick = {
+                                baseViewModel.refreshLoadDataArg.value = true
+                                detailViewModel.selectedUnit.value = text.unitName
+                                detailViewModel.isUnitExpanded.value = false
+                            }) {
+                            Text(text = text.unitName)
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+   /* Row(
+        modifier = Modifier
+            .padding(5.dp)
+
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(horizontal = 5.dp)
+                .border(border = BorderStroke(width = 2.dp, color = Color(0xffB9B9B9)))
+                .background(color = Color.White.copy(alpha = .5f))
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.End                   ,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+
+                Divider(
+                    color = Color(0xffB9B9B9),
+                    modifier = Modifier
+                        .fillMaxHeight()  //fill the max height
+                        .width(2.dp)
+                )
+                Text(
+                    modifier = Modifier.padding(
+                    vertical = 3.dp, horizontal = 5.dp),
+
+                    text = detailViewModel.selectedUnit.value,
+                    style = TextStyle(
+                        color = Color(0xff212121),
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                )
+                IconButton(onClick = {
+                    detailViewModel.isUnitExpanded.value =
+                        !detailViewModel.isUnitExpanded.value
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown, contentDescription = ""
+                    )
+                }
+            }
+        }
+
+        DropdownMenu(expanded = detailViewModel.isUnitExpanded.value,
+            onDismissRequest = { detailViewModel.isUnitExpanded.value = false }) {
+            detailViewModel.productDetails.value?.unit?.forEach { text ->
+                DropdownMenuItem(
+                    onClick = {
+                        baseViewModel.refreshLoadDataArg.value = true
+                        detailViewModel.selectedUnit.value = text.unitName
+                        detailViewModel.isUnitExpanded.value = false
+                    }) {
+                    Text(text = text.unitName)
+                }
+
+            }
+        }
+    }*/
+    /*Row(
         modifier = Modifier.fillMaxWidth()
             .padding(5.dp)
 
@@ -124,8 +429,8 @@ fun ProductQuantitySection(
             ) {
                 Text(modifier = Modifier.padding(
                     vertical = 3.dp, horizontal = 5.dp),
-                    text ="Do",
-                   // text = detailViewModel.selectedUnit.value,
+//                    text ="Do",
+                    text = detailViewModel.selectedUnit.value,
                     style = TextStyle(
                         color = Color(0xff212121),
                         fontSize = 13.sp,
@@ -157,7 +462,7 @@ fun ProductQuantitySection(
 
             }
         }
-    }
+    }*/
 
 
 
@@ -217,8 +522,11 @@ fun  RowScope.EndTimeSection(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(modifier = Modifier.padding(
-                    vertical = 3.dp, horizontal = 5.dp).weight(2f),
+                Text(modifier = Modifier
+                    .padding(
+                        vertical = 3.dp, horizontal = 5.dp
+                    )
+                    .weight(2f),
                     text = detailViewModel.endTime.value,
                     style = TextStyle(
                         color = Color(0xff212121),
@@ -278,8 +586,11 @@ fun  RowScope.StartTimeSection(
                 horizontalArrangement = Arrangement.SpaceBetween                   ,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(modifier = Modifier.padding(
-                    vertical = 3.dp, horizontal = 5.dp).weight(2f),
+                Text(modifier = Modifier
+                    .padding(
+                        vertical = 3.dp, horizontal = 5.dp
+                    )
+                    .weight(2f),
                     text = detailViewModel.srtTime.value,
                     style = TextStyle(
                         color = Color(0xff212121),
