@@ -133,7 +133,7 @@ fun ProductQuantitySection(
                     ),
                 )
                 IconButton(onClick = {
-                    detailViewModel.isNExpanded.value = !detailViewModel.isNExpanded.value
+                    detailViewModel.isUnitExpanded.value = !detailViewModel.isUnitExpanded.value
                 }) {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
@@ -143,14 +143,14 @@ fun ProductQuantitySection(
             }
         }
 
-        DropdownMenu(expanded = detailViewModel.isNExpanded.value,
-            onDismissRequest = { detailViewModel.isNExpanded.value = false }) {
+        DropdownMenu(expanded = detailViewModel.isUnitExpanded.value,
+            onDismissRequest = { detailViewModel.isUnitExpanded.value = false }) {
             detailViewModel.productDetails.value?.unit?.forEach { text ->
                 DropdownMenuItem(
                     onClick = {
                         baseViewModel.refreshLoadDataArg.value = true
                         detailViewModel.selectedUnit.value = text.unitsName
-                        detailViewModel.isNExpanded.value = false
+                        detailViewModel.isUnitExpanded.value = false
                     }) {
                     Text(text = text.unitsName)
                 }

@@ -39,7 +39,7 @@ class ProductionViewModel @Inject constructor(
 
     val isExpanded = mutableStateOf(false)
 
-    val isNExpanded = mutableStateOf(false)
+    val isUnitExpanded = mutableStateOf(false)
 
     val selectedPlant = mutableStateOf("")
 
