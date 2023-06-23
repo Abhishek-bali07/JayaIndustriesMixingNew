@@ -28,6 +28,10 @@ sealed class Destination(
 
  object DashboardScreen : NoArgumentsDestination(AppRoutes.DASHBOARD)
 
+
+
+ object ProductAddScreen:NoArgumentsDestination(AppRoutes.ADDSCREEN)
+
 // object DashboardScreen : Destination(AppRoutes.DASHBOARD, "productId"){
 //  const val productId_KEY = "productId"
 //  operator  fun  invoke(productId: String?): String = route.appendParams(

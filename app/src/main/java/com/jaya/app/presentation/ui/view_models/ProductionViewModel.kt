@@ -139,25 +139,20 @@ class ProductionViewModel @Inject constructor(
 
 
 
-    /*fun addIngredentData(ingredentName :String,ingredentQtty:String){
-        this.ingredentName.value = ""
-        this.ingredentQtty.value = ""
-        useCase.addIngredents(productIDArg, ingName = ingredentName, ingQty = ingredentQtty).onEach {
-
-           when(it.type){
+    fun addIngredentData(plantSelect :String,shiftSelect:String,){
+        useCase.updateProduct(productIDArg).onEach {
+            when(it.type){
                 EmitType.Loading ->{
                     it.value?.castValueToRequiredTypes<Boolean>()?.let {
 
                     }
                 }
-               EmitType.IngredientAdded ->{
-                   it.value?.castValueToRequiredTypes<Boolean>()?.let {
-                      addIngredents.add(ingredentName,ingredentQtty)
-                   }
-               }
-               else -> {}
+
+
+                else -> {}
+            }
+
            }
         }
 
-    }*/
-}
+    }

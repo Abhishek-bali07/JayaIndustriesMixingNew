@@ -36,9 +36,14 @@ class DetailUseCase @Inject constructor(
 
 
 
-    /* fun  addIngredents(productId: String, ingName: String, ingQty:String) = flow<Data>{
+
+
+     fun  updateProduct(
+          productId: String,
+
+     ) = flow<Data>{
           emit(Data(EmitType.Loading, value = true))
-          when(val response = repository.addIngredentsData(productId, prefs.userId(), ingName, ingQty)){
+          when(val response = repository.addIngredientData(productId, prefs.userId(), )){
                is Resource.Success ->{
                     emit(Data(EmitType.Loading, false))
                     response.data?.apply {
@@ -52,5 +57,5 @@ class DetailUseCase @Inject constructor(
                }
                else -> {}
           }
-     }*/
+     }
 }

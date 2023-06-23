@@ -6,5 +6,6 @@ object AppRoutes {
     const val OTP = "otp"
     const val DASHBOARD = "dashboard"
     const val DETAILSCREEN = "detailScreen"
+    const val ADDSCREEN ="addScreen"
 
 }

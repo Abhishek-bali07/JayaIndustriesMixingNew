@@ -65,4 +65,11 @@ object RestModule {
     @Singleton
     fun provideProductDetailsApi(@ApplicationContext appContext: Context) : ProductDetailsApi =
         provideApi(appContext, ProductDetailsApi::class.java)
+
+
+
+    @Provides
+    @Singleton
+    fun provideProductAddApi(@ApplicationContext appContext: Context) : ProductAddApi =
+        provideApi(appContext,ProductAddApi::class.java)
 }

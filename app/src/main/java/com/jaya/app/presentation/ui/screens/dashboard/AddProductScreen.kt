@@ -6,12 +6,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.resourceImage
+import com.jaya.app.presentation.states.resourceString
 import com.jaya.app.presentation.ui.view_models.AddProductionViewModel
 import com.jaya.app.presentation.ui.view_models.BaseViewModel
 import java.util.*
@@ -81,10 +84,166 @@ fun AddProductionScreen(
 
                TimeProductSection(addViewModel)
                QuantitySection(addViewModel,baseViewModel)
+               MixingSection(addViewModel, baseViewModel)
            }
         }
     }
 
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun MixingSection(
+    addViewModel: AddProductionViewModel,
+    baseViewModel: BaseViewModel
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Top
+    ) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = R.string.mixing.resourceString(), style = TextStyle(
+                fontWeight = FontWeight.W500,
+                fontSize = 20.sp
+            ))
+
+
+
+            Surface(modifier = Modifier
+                .size(width = 100.dp, height = 30.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(color = Color(0xff68B560)),
+                onClick = {
+
+                }
+            ) {
+                Row(
+                    modifier = Modifier.background(color =  Color(0xff68B560)),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = Modifier.padding(
+                            vertical = 3.dp, horizontal = 5.dp
+                        ),
+                        text = "Add",
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .background(color = Color(0xff68B560))
+                            .size(20.dp),
+                        painter = R.drawable.plus.resourceImage(),
+                        contentDescription = "null", tint = Color.White
+                    )
+
+
+                }
+
+            }
+
+
+        }
+
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp),
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 10.dp)
+                    .size(height = 54.dp, width = 100.dp),
+                value =addViewModel.ingredentName.value ,
+                onValueChange = addViewModel::onChangeIngredntName)
+
+            Surface(
+                modifier = Modifier.weight(1f))
+            {
+                Row(
+                    modifier = Modifier
+                        .padding(5.dp)
+
+                ) {
+                    Surface(
+
+                        modifier = Modifier
+                            .fillMaxWidth().padding(vertical = 5.dp)
+                            .height(55.dp)
+                            .border(border = BorderStroke(width = 2.dp, color = Color(0xffB9B9B9)))
+                            .background(color = Color.White.copy(alpha = .5f))
+
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.End                   ,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            OutlinedTextField(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .size(height = 54.dp, width = 100.dp),
+                                value =addViewModel.ingredentQtty.value ,
+                                onValueChange = addViewModel::onChangeIngredntQtty,
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = Color(0xffB9B9B9),
+                                    unfocusedBorderColor = Color(0xffB9B9B9)
+                                ))
+                            Divider(
+                                color = Color(0xffB9B9B9),
+                                modifier = Modifier
+                                    .fillMaxHeight()  //fill the max height
+                                    .width(2.dp)
+                            )
+
+                            Text(
+                                modifier = Modifier.padding(
+                                    vertical = 3.dp, horizontal = 5.dp),
+
+                                text = addViewModel.ingredentUnit.value,
+                                style = TextStyle(
+                                    color = Color(0xff212121),
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                            )
+                            IconButton(onClick = {
+                                addViewModel.isIngredentsUnitExpanded.value =
+                                    !addViewModel.isIngredentsUnitExpanded.value
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowDropDown, contentDescription = ""
+                                )
+                            }
+                        }
+                    }
+
+                    DropdownMenu(expanded = addViewModel.isIngredentsUnitExpanded.value,
+                        onDismissRequest = { addViewModel.isIngredentsUnitExpanded.value = false }) {
+                        addViewModel.productDetails.value?.unit?.forEach { text ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    baseViewModel.refreshLoadDataArg.value = true
+                                    addViewModel.ingredentUnit.value = text.unitName
+                                    addViewModel.isIngredentsUnitExpanded.value = false
+                                }) {
+                                Text(text = text.unitName)
+                            }
+
+                        }
+                    }
+                }
+
+            }
+        }
+    }
 }
 
 @Composable

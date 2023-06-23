@@ -3,6 +3,7 @@ package com.jaya.app.data.repositories
 import android.util.Log
 import com.jaya.app.core.common.constants.Resource
 import com.jaya.app.core.domain.repositories.ProductDetailRepository
+import com.jaya.app.core.models.responses.AddIngredentResponse
 import com.jaya.app.core.models.responses.ProductDetailResponse
 import com.jaya.app.data.sources.online.ProductDetailsApi
 import retrofit2.HttpException
@@ -29,5 +30,12 @@ class ProductDetailRepositoryImpl @Inject constructor(
           Log.d("Message", "getInitialData: ${ex.message}")
           Resource.Error(ex.message.toString())
       }
+    }
+
+    override suspend fun addIngredientData(
+        userId: String,
+        productId: String
+    ): Resource<AddIngredentResponse> {
+        TODO("Not yet implemented")
     }
 }
