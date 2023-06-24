@@ -67,7 +67,7 @@ import kotlinx.coroutines.launch
                     FloatingActionButton(
                         modifier = Modifier.padding(top = 80.dp),
                         onClick = {
-                             viewModel.onAddBtnClicked()
+                                viewModel.onAddProduct()
                         },
                         backgroundColor = Color(0xffFFEB56),
                         contentColor = Color.Black

@@ -49,7 +49,7 @@ interface AppModule {
 
 
     @Binds
-    fun bindProductAddRepository(ProductAddRepository : ProductAddRepositoryImpl):ProductAddRepository
+    fun bindProductAddRepository(ProductAddRepository: ProductAddRepositoryImpl): ProductAddRepository
 
 
 }

@@ -90,10 +90,11 @@ class DashboardViewModel @Inject constructor(
         )
 
     }
-    fun onAddBtnClicked(){
+
+    fun onAddProduct(){
         appNavigator.tryNavigateTo(
-            Destination.ProductAddScreen(),
-            popUpToRoute = Destination.DashboardScreen(),
+            Destination.AddProductionScreen(),
+            popUpToRoute = null,
             inclusive = false,
             isSingleTop = true
         )

@@ -40,6 +40,16 @@ class DetailUseCase @Inject constructor(
 
      fun  updateProduct(
           productId: String,
+          plantName:String,
+          shiftName:String,
+          productName:String,
+          startTime:String,
+          endTime:String,
+          quantity:String,
+          unit:String,
+
+
+
 
      ) = flow<Data>{
           emit(Data(EmitType.Loading, value = true))

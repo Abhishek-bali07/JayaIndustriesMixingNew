@@ -105,6 +105,7 @@ class MobileViewModel @Inject constructor(
                 EmitType.Navigate ->{
                     it.value?.apply {
                         castValueToRequiredTypes<Destination.OtpScreen>()?.let {
+
                         }
                     }
                 }

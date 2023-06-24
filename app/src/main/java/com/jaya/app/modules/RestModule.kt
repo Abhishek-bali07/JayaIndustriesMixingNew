@@ -67,9 +67,8 @@ object RestModule {
         provideApi(appContext, ProductDetailsApi::class.java)
 
 
-
     @Provides
     @Singleton
-    fun provideProductAddApi(@ApplicationContext appContext: Context) : ProductAddApi =
-        provideApi(appContext,ProductAddApi::class.java)
+    fun provideUpgradeProductApi(@ApplicationContext appContext: Context) : UpgradeProductApi =
+        provideApi(appContext, UpgradeProductApi::class.java)
 }

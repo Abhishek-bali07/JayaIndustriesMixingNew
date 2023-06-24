@@ -7,6 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -27,6 +29,8 @@ import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.ComposeLaunchEffect
 import com.jaya.app.presentation.states.resourceImage
 import com.jaya.app.presentation.states.resourceString
+import com.jaya.app.presentation.ui.custom_composable.AppButton
+import com.jaya.app.presentation.ui.custom_composable.SaveButton
 import com.jaya.app.presentation.ui.view_models.BaseViewModel
 import com.jaya.app.presentation.ui.view_models.ProductionViewModel
 import java.util.*
@@ -67,11 +71,14 @@ fun ProductionDetailScreen(
         }
     ) {
        paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+        Box(
+            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd,
         ) {
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+            ) {
                 if (detailViewModel.productDetails.value?.productName?.isNotEmpty() == true){
 
                     productdataSection(detailViewModel,baseViewModel)
@@ -87,21 +94,39 @@ fun ProductionDetailScreen(
                     ProductTimeSection(detailViewModel)
                     ProductQuantitySection(detailViewModel,baseViewModel)
                     MixingIngredentSection(detailViewModel, baseViewModel)
+                    ButtonSection(detailViewModel)
+
 
 
 
                 }
+            }
+            SaveButton(
+                enable = detailViewModel.enableBtn.value,
+                loading = detailViewModel.mixingLoading.value,
+                action = detailViewModel::uploadMixingData,
+                name =R.string.save )
         }
+
     }
     BackHandler {
         baseViewModel.appNavigator.tryNavigateBack(inclusive = true)
     }
     baseViewModel.productionDataLoadArg.ComposeLaunchEffect(intentionalCode = {
         if (it.isNotEmpty()){
-            detailViewModel.initialData(it)
+            detailViewModel.initialData()
         }
     }) {""}
 
+}
+
+@Composable
+fun ButtonSection(detailViewModel: ProductionViewModel) {
+    Row(
+        modifier = Modifier.fillMaxWidth()) {
+
+
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -130,9 +155,7 @@ fun MixingIngredentSection(
                 .size(width = 100.dp, height = 30.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .background(color = Color(0xff68B560)),
-                onClick = {
-
-                }
+                onClick = detailViewModel::addIngredient
             ) {
                 Row(
                     modifier = Modifier.background(color =  Color(0xff68B560)),
@@ -189,7 +212,8 @@ fun MixingIngredentSection(
                     Surface(
 
                         modifier = Modifier
-                            .fillMaxWidth().padding(vertical = 5.dp)
+                            .fillMaxWidth()
+                            .padding(vertical = 5.dp)
                             .height(55.dp)
                             .border(border = BorderStroke(width = 2.dp, color = Color(0xffB9B9B9)))
                             .background(color = Color.White.copy(alpha = .5f))
@@ -255,6 +279,52 @@ fun MixingIngredentSection(
                 }
 
             }
+        }
+
+        LazyColumn( modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top){
+            items(detailViewModel.addIngredents){item ->
+                Card(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(12.dp)
+                ) {
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                        if (item != null) {
+                            Column() {
+                                Row() {
+                                    Text(text = "IngredentName:", style = TextStyle(fontWeight = FontWeight.W700))
+                                    Text(text ="${item.ingName}")
+                                }
+
+                                Row(){
+                                    Text(text = "IngredentQuantity:", style = TextStyle(fontWeight = FontWeight.W700))
+                                    Text(text = "${item.ingQtty}${item.selectedUnit}")
+                                }
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    detailViewModel.removeIngredient(item)
+                                }
+                            ) {
+                                Icon(
+                                    painter = R.drawable.mcircle.resourceImage(),
+                                    contentDescription = null
+                                )
+                            }
+                            
+
+                        }
+                    }
+                }
+            }
+
         }
     }
 
@@ -329,7 +399,9 @@ fun ProductQuantitySection(
                 }
 
                 DropdownMenu(expanded = detailViewModel.isUnitExpanded.value,
-                    onDismissRequest = { detailViewModel.isUnitExpanded.value = false }) {
+                    onDismissRequest = { detailViewModel.isUnitExpanded.value = false },
+
+                    ) {
                     detailViewModel.productDetails.value?.unit?.forEach { text ->
                         DropdownMenuItem(
                             onClick = {
@@ -583,8 +655,9 @@ fun  RowScope.StartTimeSection(
             .background(color = Color.White.copy(alpha = .5f))) {
 
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween                   ,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
+
             ) {
                 Text(modifier = Modifier
                     .padding(

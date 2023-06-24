@@ -1,17 +1,21 @@
 package com.jaya.app.presentation.ui.view_models
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jaya.app.core.common.constants.Data
+import com.jaya.app.core.common.constants.Destination
 import com.jaya.app.core.common.enums.EmitType
+import com.jaya.app.core.entities.AddedIngredents
 import com.jaya.app.core.entities.ProductionData
+import com.jaya.app.core.entities.UploadData
 import com.jaya.app.core.usecases.AddUseCase
 import com.jaya.app.core.utils.helper.AppNavigator
 import com.jaya.app.presentation.states.castValueToRequiredTypes
+import com.jaya.app.utills.helper_impl.SavableMutableState
+import com.jaya.app.utills.helper_impl.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -23,18 +27,12 @@ class AddProductionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-
-    init {
-        initialDetail()
-    }
-
     val productDetails = mutableStateOf<ProductionData?>(null)
 
 
     val selectedShift = mutableStateOf("")
 
     val selectedPlant = mutableStateOf("")
-
 
     val productName = mutableStateOf("")
 
@@ -44,17 +42,32 @@ class AddProductionViewModel @Inject constructor(
 
     val quantityName = mutableStateOf("")
 
+    val addIngredents = mutableStateListOf<AddedIngredents?>(null)
+
+    val ingredentName = mutableStateOf("")
+    val ingredentQtty = mutableStateOf("")
+    val ingredentUnit = mutableStateOf("")
+
+
+
+    val mixingLoading = SavableMutableState(
+        key = UiData.SaveIngredientLoading,
+        savedStateHandle =savedStateHandle,
+        initialData = false
+    )
+
+    val enableBtn = SavableMutableState(
+        key = UiData.SaveBtnEnable,
+        savedStateHandle = savedStateHandle,
+        initialData = false
+    )
+
 
     val selectedUnit = mutableStateOf("")
 
     val isExpanded = mutableStateOf(false)
     val isMenuExpanded = mutableStateOf(false)
     val isIngredentsUnitExpanded =  mutableStateOf(false)
-
-
-    val ingredentName = mutableStateOf("")
-    val ingredentQtty = mutableStateOf("")
-    val ingredentUnit = mutableStateOf("")
 
     fun onChangeProductName(pn : String){
         productName.value = pn
@@ -64,49 +77,78 @@ class AddProductionViewModel @Inject constructor(
         quantityName.value = qn
     }
 
+    fun addIngredient() {
+        val addedIngredient = AddedIngredents(
+            ingName = ingredentName.value,
+            ingQtty = ingredentQtty.value,
+            selectedUnit = ingredentUnit.value
 
-    fun onChangeIngredntName(ing :String){
-        ingredentName.value = ing
+        )
+        addIngredents.add(addedIngredient)
     }
 
-    fun onChangeIngredntQtty(qty :String){
-        ingredentQtty.value = qty
+
+
+    fun removeIngredient(item: AddedIngredents) {
+        addIngredents.remove(item)
     }
 
-    private var productIDArg = ""
 
-    fun initialDetail(){
-        useCase.InitialDetails() .onEach {
+
+    fun uploadMixingData(){
+        val uploadData = UploadData(
+            productName = productName.value,
+            selectedPlant = selectedPlant.value,
+            selectedShift = selectedShift.value,
+            startTime = srtTime.value,
+            endTime = endTime.value,
+            productQty = quantityName.value,
+            selectedUnit = selectedUnit.value,
+            upgradedIngredents = addIngredents.toList()
+        )
+        useCase.addProductData(uploadData,selectedProductID).onEach {
             when(it.type){
-                EmitType.ProductDetails ->{
-                   it.value?.castValueToRequiredTypes<ProductionData>()?.let { data ->
-                   data.plantName.map { plant ->
-                       if(plant.isSelected){
-                           selectedPlant.value = plant.plantName
-                       }
-                   }
-                   data.shiftName.map {shift ->
-                       if (shift.isSelected){
-                           selectedShift.value = shift.shiftName
-                       }
-                   }
-                   data.unit.map {  unit->
-                       if(unit.isSelected){
-                           selectedUnit.value = unit.unitName
-                       }
-                   }
-                       productDetails.value =data
+                EmitType.Loading ->{
+                    it.value?.apply {
+                        castValueToRequiredTypes<Boolean>()?.let {
+                            mixingLoading.setValue(it)
+                        }
+                    }
+                }
+                EmitType.Inform ->{
+                    it.value?.apply {
+                        castValueToRequiredTypes<Boolean>()?.let {
 
+                        }
+                    }
+                }
 
-                   }
+                EmitType.Navigate -> {
+                    it.value?.apply {
+                        castValueToRequiredTypes<Destination>()?.let { destination ->
+                            appNavigator.tryNavigateBack()
+                        }
+                    }
+                }
+                EmitType.NetworkError -> {
+                    it.value?.apply {
+                        castValueToRequiredTypes<String>()?.let {
+                            toastNotify.value = it
+                        }
+                    }
+                }
+                EmitType.BackendError -> {
+                    it.value?.apply {
+                        castValueToRequiredTypes<String>()?.let {
+                            toastNotify.value = it
+                        }
+                    }
                 }
 
                 else -> {}
             }
         }.launchIn(viewModelScope)
     }
-
-
 
 
 }

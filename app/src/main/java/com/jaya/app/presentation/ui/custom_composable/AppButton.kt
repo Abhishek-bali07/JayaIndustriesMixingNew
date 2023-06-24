@@ -1,4 +1,4 @@
-package com.bsquare.app.presentation.ui.custom_composable
+package com.jaya.app.presentation.ui.custom_composable
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent

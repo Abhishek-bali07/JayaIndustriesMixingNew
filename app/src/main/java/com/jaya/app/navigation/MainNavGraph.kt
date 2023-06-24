@@ -54,13 +54,12 @@ fun MainNavGraph(
             DashBoardScreen()
         }
 
-
-        composable(destination = Destination.ProductAddScreen){
-            AddProductionScreen(baseViewModel)
-        }
-
         composable(destination = Destination.ProductionDetailScreen){
             ProductionDetailScreen(baseViewModel)
+        }
+
+        composable(destination = Destination.AddProductionScreen){
+            AddProductionScreen(baseViewModel)
         }
 
     }

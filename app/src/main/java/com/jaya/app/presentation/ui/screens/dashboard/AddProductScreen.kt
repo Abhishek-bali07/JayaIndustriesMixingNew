@@ -6,6 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -25,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaya.app.mixing.R
 import com.jaya.app.presentation.states.resourceImage
 import com.jaya.app.presentation.states.resourceString
+import com.jaya.app.presentation.ui.custom_composable.SaveButton
 import com.jaya.app.presentation.ui.view_models.AddProductionViewModel
 import com.jaya.app.presentation.ui.view_models.BaseViewModel
 import java.util.*
@@ -86,17 +89,21 @@ fun AddProductionScreen(
                QuantitySection(addViewModel,baseViewModel)
                MixingSection(addViewModel, baseViewModel)
            }
+            SaveButton(
+                enable = addViewModel.enableBtn.value,
+                loading = addViewModel.mixingLoading.value,
+                action = addViewModel::uploadMixingData,
+                name =R.string.save )
         }
     }
 
 }
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MixingSection(
     addViewModel: AddProductionViewModel,
-    baseViewModel: BaseViewModel
-) {
+    baseViewModel: BaseViewModel) {
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Top
@@ -117,9 +124,7 @@ fun MixingSection(
                 .size(width = 100.dp, height = 30.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .background(color = Color(0xff68B560)),
-                onClick = {
-
-                }
+                onClick = addViewModel::addIngredient
             ) {
                 Row(
                     modifier = Modifier.background(color =  Color(0xff68B560)),
@@ -162,8 +167,8 @@ fun MixingSection(
                     .weight(1f)
                     .padding(vertical = 10.dp)
                     .size(height = 54.dp, width = 100.dp),
-                value =addViewModel.ingredentName.value ,
-                onValueChange = addViewModel::onChangeIngredntName)
+                value =addViewModel.ingredentName.value,
+                onValueChange = addViewModel::onChangeIngredentName)
 
             Surface(
                 modifier = Modifier.weight(1f))
@@ -176,7 +181,8 @@ fun MixingSection(
                     Surface(
 
                         modifier = Modifier
-                            .fillMaxWidth().padding(vertical = 5.dp)
+                            .fillMaxWidth()
+                            .padding(vertical = 5.dp)
                             .height(55.dp)
                             .border(border = BorderStroke(width = 2.dp, color = Color(0xffB9B9B9)))
                             .background(color = Color.White.copy(alpha = .5f))
@@ -191,7 +197,7 @@ fun MixingSection(
                                     .weight(1f)
                                     .size(height = 54.dp, width = 100.dp),
                                 value =addViewModel.ingredentQtty.value ,
-                                onValueChange = addViewModel::onChangeIngredntQtty,
+                                onValueChange = addViewModel::onChangeIngredentQtty,
                                 colors = TextFieldDefaults.outlinedTextFieldColors(
                                     focusedBorderColor = Color(0xffB9B9B9),
                                     unfocusedBorderColor = Color(0xffB9B9B9)
@@ -243,7 +249,54 @@ fun MixingSection(
 
             }
         }
+
+        LazyColumn( modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top){
+            items(addViewModel.addIngredents){item ->
+                Card(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(12.dp)
+                ) {
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                        if (item != null) {
+                            Column() {
+                                Row() {
+                                    Text(text = "IngredentName:", style = TextStyle(fontWeight = FontWeight.W700))
+                                    Text(text ="${item.ingName}")
+                                }
+
+                                Row(){
+                                    Text(text = "IngredentQuantity:", style = TextStyle(fontWeight = FontWeight.W700))
+                                    Text(text = "${item.ingQtty}${item.selectedUnit}")
+                                }
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    addViewModel.removeIngredient(item)
+                                }
+                            ) {
+                                Icon(
+                                    painter = R.drawable.mcircle.resourceImage(),
+                                    contentDescription = null
+                                )
+                            }
+
+
+                        }
+                    }
+                }
+            }
+
+        }
     }
+
 }
 
 @Composable

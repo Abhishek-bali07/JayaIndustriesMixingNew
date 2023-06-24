@@ -7,6 +7,8 @@ enum class UiData {
     LoginApiLoading,
     DriverOtpInput,
     DrawerGuestureState,
+    SaveBtnEnable,
+    SaveIngredientLoading,
 
 
 }
